@@ -1,0 +1,16 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 707331742000-b9hvartfkqajc4j0h4tetsitbdc69t8e.apps.googleusercontent.com
+            client-secret: wz2in6dUdGx8IxhIurrXBkH9
+            scope: profile
+app:
+  auth:
+    tokenSecret: R$mcU{0,a-JckFf@tS_X's9y/U{EP9QU6V.H#@V/iV}ygP9)~csE-Ykr?!9ktTy
+    tokenExpirationMsec: 3600000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:8080/oauth2/redirect
