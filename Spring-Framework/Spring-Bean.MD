@@ -1,21 +1,19 @@
 ## 스프링 프레임워크 입문
 
----
-
 ### Inversion of Control (제어의 역전)
 
 아무거나 뒤 바뀔수 있지만 여기서 말하는 것은 주로 **'의존성'** 이다.
 
 ```Java
 class OwnerController {
-  // 스프링을 사용하기 IoC를 사용하지 않으면 이렇게 해서 의존성을 설정해줘야 한다.
+	// 스프링을 사용하기 IoC를 사용하지 않으면 이렇게 해서 의존성을 설정해줘야 한다.
 	private OwnerRepository repository = new OwnerRepository();
 }
 
 class OwnerControllerTest {
-  OwnerRepository repo = new OwnerRepository();
-  // 여기에서 Controller에 OwnerRepository의 의존성을 주입해준다.
-  OwnerController controller = new OwnerController(repo);
+	OwnerRepository repo = new OwnerRepository();
+	// 여기에서 Controller에 OwnerRepository의 의존성을 주입해준다.
+	OwnerController controller = new OwnerController(repo);
 }
 ```
 
