@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Chapter_2_1/Chapter_2_1.iml" filepath="$PROJECT_DIR$/Chapter_2_1/Chapter_2_1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Chapter_2_2/Chapter_2_2.iml" filepath="$PROJECT_DIR$/Chapter_2_2/Chapter_2_2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Chapter_2_3/Chapter_2_3.iml" filepath="$PROJECT_DIR$/Chapter_2_3/Chapter_2_3.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Effective-Java.iml" filepath="$PROJECT_DIR$/.idea/Effective-Java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Chapter_2_4/Chapter_2_4.iml" filepath="$PROJECT_DIR$/Chapter_2_4/Chapter_2_4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Effective-Java.iml" filepath="$PROJECT_DIR$/Effective-Java.iml" />
     </modules>
   </component>
 </project>
