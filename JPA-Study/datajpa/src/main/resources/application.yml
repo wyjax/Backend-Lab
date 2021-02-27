@@ -3,3 +3,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/datajpa
     username: wyjax
     password: 1q2w3e4r
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
