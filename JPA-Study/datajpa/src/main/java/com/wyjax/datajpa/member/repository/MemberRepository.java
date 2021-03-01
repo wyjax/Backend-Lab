@@ -5,10 +5,11 @@ import com.wyjax.datajpa.member.dto.MemberDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.List;
 
 // 인터페이스로 되어있는데 실행시점에 구현체를 스프링이 만들어줘서 인스턴스에 넣어준다.
@@ -50,4 +51,27 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Page<Member> findByAge2(int age, Pageable pageable);
 
     // 엔티티는 애플리케이션에 노출시키면 안된다. 엔티티를 바꾸면 api 스펙이 바뀌기 때문이다. 그렇기 떄문에 dto로 변환해서 사용한다.
+
+    @Modifying // Modifying을 넣어줘야 executeUpdate() 메소드를 호출한다.
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age);
+
+    // fetch join을 하게 되면 member에 연관된 팀을 모두 가져온다.
+    @Query("select m from Member m left join fetch m.team")
+    List<Member> findMemberFetchJoin();
+
+    @Override
+    @EntityGraph(attributePaths = {"team"})
+    List<Member> findAll();
+
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m")
+    List<Member> findMemberFetchJoins( );
+
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+    Member findReadOnlyByUsername(String username);
+
+    // JPA가 제공하는 lock을 편리하게 사용할 수 있다.
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Member> findLockByUsername(String dwdwdw);
 }

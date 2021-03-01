@@ -1,6 +1,5 @@
 package com.wyjax.datajpa.repository;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.SortingIterator;
 import com.wyjax.datajpa.member.domain.Member;
 import com.wyjax.datajpa.member.dto.MemberDto;
 import com.wyjax.datajpa.member.repository.MemberRepository;
@@ -15,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @SpringBootTest
@@ -24,6 +25,9 @@ public class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Test
     public void testMember() {
@@ -111,5 +115,58 @@ public class MemberRepositoryTest {
         // then
         List<Member> members1 = members.getContent();
         long totalElements = members.getTotalElements();
+    }
+
+    @Test
+    public void 수정_쿼리_테스트() {
+        memberRepository.save(new Member("member1", 10));
+        int result = memberRepository.bulkAgePlus(20);
+        em.flush();
+        em.clear();
+    }
+
+    @Test
+    public void findMemberLazy() {
+        Team teamA = new Team("A");
+        Team teamB = new Team("B");
+        Member member1 = new Member("member1", 28, teamA);
+        Member member2 = new Member("member2", 32, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        em.flush();
+        em.clear();
+
+        // when
+        List<Member> members = memberRepository.findAll();
+
+        for (Member m : members) {
+            System.out.println(m.getUsername());
+            System.out.println(m.getTeam().getName());
+            // 이렇게 찍으면 Team.name은 프록시 객체여서 이 때 추가쿼리가 나가게 된다.
+        }
+    }
+
+    @Test
+    public void queryHint() {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");
+
+        em.flush();
+        // then
+    }
+
+    @Test
+    public void lockTest() {
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+
+        List<Member> member = memberRepository.findLockByUsername("member1");
     }
 }

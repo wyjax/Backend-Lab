@@ -1,8 +1,10 @@
 package com.wyjax.datajpa;
 
 import com.wyjax.datajpa.member.domain.Member;
+import com.wyjax.datajpa.member.repository.MemberJpaRepository;
 import com.wyjax.datajpa.team.doamin.Team;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,9 @@ public class MemberTest {
 
     @PersistenceContext
     EntityManager em;
+
+    @Autowired
+    private MemberJpaRepository memberJpaRepository;
 
     @Test
     public void testEntity() {
@@ -65,4 +70,5 @@ public class MemberTest {
             System.out.println(member.getTeam());
         }
     }
+
 }
