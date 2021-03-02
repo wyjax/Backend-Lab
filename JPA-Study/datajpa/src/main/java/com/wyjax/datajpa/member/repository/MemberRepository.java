@@ -13,7 +13,8 @@ import javax.persistence.QueryHint;
 import java.util.List;
 
 // 인터페이스로 되어있는데 실행시점에 구현체를 스프링이 만들어줘서 인스턴스에 넣어준다.
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+    // 통계같은 복잡한 쿼리와 단순한 화면에 뿌리는 쿼리들은 분리해서 하는 것이 좋다.
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
@@ -66,7 +67,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @EntityGraph(attributePaths = {"team"})
     @Query("select m from Member m")
-    List<Member> findMemberFetchJoins( );
+    List<Member> findMemberFetchJoins();
 
     @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
     Member findReadOnlyByUsername(String username);
