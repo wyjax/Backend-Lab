@@ -2,6 +2,7 @@ package com.wyjax.datajpa;
 
 import com.wyjax.datajpa.member.domain.Member;
 import com.wyjax.datajpa.member.repository.MemberJpaRepository;
+import com.wyjax.datajpa.member.repository.MemberRepository;
 import com.wyjax.datajpa.team.doamin.Team;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,10 @@ import java.util.List;
 public class MemberTest {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     private MemberJpaRepository memberJpaRepository;
@@ -71,4 +75,24 @@ public class MemberTest {
         }
     }
 
+    @Test
+    public void JpaEventBaseEntity() throws Exception {
+        // given
+        Member member = new Member("member1");
+        memberRepository.save(member); // @PrePersist 동작
+
+        Thread.sleep(100);
+        member.setUsername("member2");
+        em.flush(); // @PreUpdate 동작
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findById(member.getId()).get();
+
+        // then
+        System.out.println("create date : " + findMember.getCreateDate());
+        System.out.println("update date : " + findMember.getLastModifiedDate());
+        System.out.println("create by : " + findMember.getCreatedBy());
+        System.out.println("update by : " + findMember.getLastModifiedBy());
+    }
 }

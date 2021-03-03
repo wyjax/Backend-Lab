@@ -1,5 +1,6 @@
 package com.wyjax.datajpa.team.doamin;
 
+import com.wyjax.datajpa.member.domain.BaseEntity;
 import com.wyjax.datajpa.member.domain.Member;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name"})
-public class Team {
+public class Team extends BaseEntity {
 
     @Id
     @Column(name = "team_id")
