@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    username: wyjax
+    password: 1q2w3e4r
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/querydsl
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
