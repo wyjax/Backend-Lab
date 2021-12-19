@@ -1,10 +1,7 @@
 package com.wyjax.querydsl.member.domain;
 
 import com.wyjax.querydsl.team.domain.Team;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "name", "age"})
 public class Member {
 
     @Id
@@ -20,6 +18,8 @@ public class Member {
 
     private String name;
 
+    private int age;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
 
@@ -27,8 +27,19 @@ public class Member {
         this.name = name;
     }
 
+    public Member(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
     public Member(String name, Team team) {
         this.name = name;
+        this.team = team;
+    }
+
+    public Member(String name, int age, Team team) {
+        this.name = name;
+        this.age = age;
         this.team = team;
     }
 
