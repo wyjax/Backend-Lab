@@ -1,14 +1,18 @@
 package com.wyjax.querydsl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wyjax.querydsl.member.domain.Member;
 import com.wyjax.querydsl.member.domain.QMember;
 import com.wyjax.querydsl.member.dto.MemberDto;
+import com.wyjax.querydsl.member.dto.QMemberDto;
 import com.wyjax.querydsl.team.domain.Team;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,9 +124,88 @@ public class QuerydslBasicTest {
         print(dtos);
     }
 
+    @Test
+    public void findDtoByQueryProjection() {
+        /*
+            @QueryProjection을 사용하면 타입에 맞게만 들어가기 때문에 컴파일 시점에 알 수 있음
+         */
+        queryFactory
+                .select(new QMemberDto(member.name, member.age))
+                .from(member)
+                .fetch();
+    }
+
+    @Test
+    public void findDtoByQueryProjection_생성자에서_계산가능한가() {
+        /*
+            생성자를 통하여 들어가기 떄문에 생성자에서 추가계산이 필요할 경우 계산이 가능하다.
+            단점, @QueryProjection에 의존성이 생기기 때문에 querydsl lib를 제거할 경우 오류가 나서 고쳐줘야함
+         */
+        List<MemberDto> dtos = queryFactory
+                .select(new QMemberDto(member.name))
+                .from(member)
+                .fetch();
+        print(dtos);
+    }
+
     private void print(List<?> list) {
         for (Object o : list) {
             System.out.println(o.toString());
         }
     }
+
+    @Test
+    public void dynamicQuery_BooleanBuilder() {
+        String name = "member2";
+        Integer age = null;
+
+        List<Member> result = searchMember1(name, age);
+        Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+
+    private List<Member> searchMember1(String name, Integer age) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (name != null) {
+            builder.and(member.name.eq(name));
+        }
+        if (age != null) {
+            builder.and(member.age.eq(age));
+        }
+
+        return queryFactory
+                .selectFrom(member)
+                .where(builder)
+                .fetch();
+    }
+
+    @Test
+    public void dynamicQuery_whereParam() {
+        String name = "member2";
+        Integer age = 100;
+
+        List<Member> result = searchMember2(name, age);
+        Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+
+    private List<Member> searchMember2(String name, Integer age) {
+        return queryFactory
+                .selectFrom(member)
+                .where(allEq(name, age))
+                .fetch();
+    }
+
+    private BooleanExpression userNameEq(String name) {
+        return name == null ? null : member.name.eq(name);
+    }
+
+    private BooleanExpression ageEq(Integer age) {
+        return age == null ? null : member.age.eq(age);
+    }
+
+    private BooleanExpression allEq(String name, Integer age) {
+        return userNameEq(name)
+                .and(ageEq(age));
+    }
+
+
 }
