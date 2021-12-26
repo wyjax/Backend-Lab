@@ -47,3 +47,7 @@ public class Member {
         this.team = team;
     }
 }
+/*
+    1. querydsl을 사용하는 이유
+    2.
+ */

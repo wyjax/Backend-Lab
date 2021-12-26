@@ -2,7 +2,6 @@ package com.wyjax.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wyjax.querydsl.member.domain.Member;
-import com.wyjax.querydsl.member.domain.QMember;
 import com.wyjax.querydsl.team.domain.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
