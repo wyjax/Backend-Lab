@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MessageProducer {
+public class OrderEventProducer {
     private final RabbitTemplate rabbitTemplate;
 
     public void send(String message) {
-        rabbitTemplate.convertAndSend("aa", "aa.bb.#", message);
+        rabbitTemplate.convertAndSend("aa.order.fanout", "", message);
         System.out.println("send message : " + message);
     }
 }

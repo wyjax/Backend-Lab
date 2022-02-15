@@ -1,6 +1,6 @@
 package com.wyjax.queuetest.amq;
 
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,23 +12,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    public static final String topicExchangeName = "wyjax-exchange";
+    public static final String exchangeName = "aa.order.fanout";
     public static final String queueName = "wyjax.queue";
 
-    @Bean
-    public Queue queue() {
-        return new Queue(queueName);
-    }
-
-//    @Bean
-//    public TopicExchange exchange() {
-//        return new TopicExchange(topicExchangeName);
-//    }
-
-//    @Bean
-//    public Binding binding(Queue queue, TopicExchange exchange) {
-//        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
-//    }
 
     @RabbitListener(bindings = @QueueBinding(
             value = @org.springframework.amqp.rabbit.annotation.Queue(value = queueName),
@@ -38,12 +24,21 @@ public class RabbitMQConfig {
         System.out.println("receive message : " + message);
     }
 
-//    @Bean
-//    MessageListenerAdapter listenerAdapter(PrimeNumberReceiver receiver, Jackson2JsonMessageConverter converter) {
-//        MessageListenerAdapter listenerAdapter = new MessageListenerAdapter(receiver, "receive");
-//        listenerAdapter.setMessageConverter(converter);
-//        return listenerAdapter;
-//    }
+    @Bean
+    public Declarables orderDeclarable() {
+        Queue queue = new Queue(queueName);
+        FanoutExchange exchange = new FanoutExchange(exchangeName);
+
+        return new Declarables(queue,
+                exchange,
+                BindingBuilder.bind(queue).to(exchange));
+    }
+
+    @RabbitListener(bindings = @QueueBinding(value = @org.springframework.amqp.rabbit.annotation.Queue(queueName),
+            exchange = @Exchange(value = exchangeName, type = ExchangeTypes.FANOUT)))
+    public void receive(String message) {
+        System.out.println(message);
+    }
 
     @Bean
     Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
@@ -56,13 +51,4 @@ public class RabbitMQConfig {
         rabbitTemplate.setMessageConverter(converter);
         return rabbitTemplate;
     }
-
-//    @Bean
-//    SimpleMessageListenerContainer container(ConnectionFactory factory, MessageListenerAdapter adapter) {
-//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-//        container.setConnectionFactory(factory);
-//        container.setQueueNames(queueName);
-//        container.setMessageListener(adapter);
-//        return container;
-//    }
 }
