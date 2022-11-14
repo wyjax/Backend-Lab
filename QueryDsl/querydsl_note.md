@@ -27,3 +27,6 @@ QMember qMember = QMember.member; // 기본 인스턴스 사용
 
 1. BooleanBuilder 
 2. where 다중 파라미터 사용
+
+querydsl Dto Map<String, List> Projections
+http://www.querydsl.com/static/querydsl/3.4.2/reference/html/ch03s02.html
