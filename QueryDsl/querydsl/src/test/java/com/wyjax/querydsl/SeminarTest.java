@@ -3,6 +3,7 @@ package com.wyjax.querydsl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wyjax.querydsl.menu.domain.Menu;
 import com.wyjax.querydsl.store.domain.Store;
+import com.wyjax.querydsl.store.dto.StoreDto;
 import com.wyjax.querydsl.store.query.StoreQuery;
 import com.wyjax.querydsl.store.query.StoreSpecification;
 import com.wyjax.querydsl.store.repository.StoreRepository;
@@ -60,6 +61,13 @@ public class SeminarTest {
     }
 
     @Test
+    public void store_조회_jpql() {
+        String searchName = "미스터 낙곱새";
+        Store store = storeQuery.findStoreByJpql(searchName);
+        Assertions.assertThat(store.getName()).isEqualTo(searchName);
+    }
+
+    @Test
     public void store_조회_querydsl() {
         String name = "미스터 낙곱새";
         Store store = storeQuery.findStoreByQuerydsl(name);
@@ -76,11 +84,53 @@ public class SeminarTest {
     }
 
     @Test
+    public void store_조회_spectification_join() {
+        String menuName = "낙곱새";
+        String storeName = "미스터 낙곱새";
+        Store store = storeRepository.findAll(StoreSpecification.joinMenu(menuName)).get(0);
+
+        Assertions.assertThat(store.getName()).isEqualTo(storeName);
+    }
+
+    @Test
     public void store_조회_메뉴로_찾기() {
         String name = "미스터 낙곱새";
         String menuName = "낙곱새";
         Store store = storeQuery.findStoreByMenuName(menuName);
         Assertions.assertThat(store).isNotNull();
         Assertions.assertThat(store.getName()).isEqualTo(name);
+        System.out.println(store);
+    }
+
+    @Test
+    public void store_projection_beand() {
+        String name = "미스터 낙곱새";
+        StoreDto storeDto = storeQuery.getStoreDtos_bean(name);
+//        Assertions.assertThat(storeDto.getName()).isEqualTo(name);
+        System.out.println(storeDto);
+    }
+
+    @Test
+    public void store_projection_Fields() {
+        String name = "미스터 낙곱새";
+        StoreDto storeDto = storeQuery.getStoreDtos_Fields(name);
+//        Assertions.assertThat(storeDto.getName()).isEqualTo(name);
+        System.out.println(storeDto);
+    }
+
+    @Test
+    public void store_projection_Constructor() {
+        String name = "미스터 낙곱새";
+        StoreDto storeDto = storeQuery.getStoreDtos_Constructor(name);
+//        Assertions.assertThat(storeDto.getName()).isEqualTo(name);
+        System.out.println(storeDto.toString());
+    }
+
+    @Test
+    public void store_projection_queryprojection() {
+        String name = "미스터 낙곱새";
+        StoreDto storeDto = storeQuery.getStoreDtos_queryProjection(name);
+//        Assertions.assertThat(storeDto.getName()).isEqualTo(name);
+        System.out.println(storeDto.toString());
     }
 }
