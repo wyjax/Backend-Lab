@@ -1,0 +1,33 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: d6b9210d77da390c0xxxxxxxxxxxxxxxxx
+            client-secret: 9upBHVXp5NKDpjoNSVxxxxxxxxxxxxxx
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/api/login/oauth2/code/kakao
+          github:
+            client-id: ad01b2ffc47e6827d6c5
+            client-secret: dba86a3a284d09deaa09a903098ea144220134b3
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: kakao_account
+          okta:
+            authorization-uri: https://your-subdomain.oktapreview.com/oauth2/v1/authorize
+            token-uri: https://your-subdomain.oktapreview.com/oauth2/v1/token
+            user-info-uri: https://your-subdomain.oktapreview.com/oauth2/v1/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: https://your-subdomain.oktapreview.com/oauth2/v1/keys
+app:
+  auth:
+    tokenSecret: R$mcU{0,a-JckFf@tS_X's9y/U{EP9QU6V.H#@V/iV}ygP9)~csE-Ykr?!9ktTy
+    tokenExpirationMsec: 3600000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:8080/oauth2/redirect
