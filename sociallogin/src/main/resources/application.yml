@@ -1,17 +1,23 @@
 spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            client-id: d6b9210d77da390c0596da4fcdd3ead0
-            client-secret: 9upBHVXp5NKDpjoNSVATS78nALdSUqip
-            client-name: Kakao
-            authorization-grantType: authorization_code
-            redirect-uri: http://localhost:8080/api/login/oauth2/code/kakao
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: kakao_account
+  h2:
+    console:
+      enabled: true
+  profiles:
+    include: oauth
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:public;
+      username: sa
+      password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
