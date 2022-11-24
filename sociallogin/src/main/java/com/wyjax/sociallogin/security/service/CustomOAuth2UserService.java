@@ -25,15 +25,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService userService = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = userService.loadUser(userRequest);
-
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
-
-        // 사용자 정보 가져옴
-        OAuth2Attribute attribute = OAuth2Attribute.of(registrationId,
-                userName,
-                oAuth2User.getAttributes());
+        OAuth2Attribute attribute = OAuth2Attribute.of(registrationId, userName, oAuth2User.getAttributes());
         Member member = saveOrUpdate(attribute);
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(member.getRole())),
