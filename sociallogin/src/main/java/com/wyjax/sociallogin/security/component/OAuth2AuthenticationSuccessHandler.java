@@ -17,17 +17,18 @@ import java.util.Optional;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
     private final TokenProvider tokenProvider;
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final HttpCookieOAuth2AuthorizationRequestRepository authorizationRequestRepository;
 
     @Autowired
     OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider,
-                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+                                       HttpCookieOAuth2AuthorizationRequestRepository authorizationRequestRepository) {
         this.tokenProvider = tokenProvider;
-        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+        this.authorizationRequestRepository = authorizationRequestRepository;
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException {
         String targetUrl = determineTargetUrl(request, response, authentication);
 
         if (response.isCommitted()) {
@@ -53,6 +54,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+        authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 }
