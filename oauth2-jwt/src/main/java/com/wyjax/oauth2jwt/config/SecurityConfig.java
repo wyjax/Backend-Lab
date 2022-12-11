@@ -35,8 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/**")
                 .permitAll();
-//                .anyRequest()
-//                .authenticated();
         http.oauth2Login()
                 .userInfoEndpoint()
                 .userService(customOAuth2Service)
