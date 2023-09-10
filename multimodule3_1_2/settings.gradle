@@ -1,0 +1,4 @@
+rootProject.name = 'dop-multimodule'
+include 'app-core'
+include 'app-api'
+

@@ -1,0 +1,31 @@
+server:
+  port: 8090
+spring:
+  #  datasource:
+  #    url: jdbc:postgresql://localhost:5432/dop-sparrow
+  #    username: dopsparrow
+  #    password: tnseornrqkq1@
+  #    driver-class-name: org.h2.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+      httpclient:
+        disable-ssl-validation: true
+        max-connections: 200
+        max-connections-per-route: 10
+      client:
+        config:
+          default:
+            connect-timeout: 10000
+            read-timeout: 600000
+sparrow:
+  username: customer_portal
+  password: 1qaz2wsx#
+#logging:
+#  level:
+#    root: debug
